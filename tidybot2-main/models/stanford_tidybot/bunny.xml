@@ -1,0 +1,28 @@
+<mujoco model="bunny">
+<compiler inertiafromgeom="true"/>
+
+    <asset>
+        <mesh name="bunny_mesh" file="../assets/stanford_bunny/stanford_bunny.stl" scale="2 2 2"/>
+    </asset>
+
+    <worldbody>
+        <body name="bunny" pos="1 -0.75 0.95" euler="0 0 1.5708">
+            <freejoint/>
+
+            <!-- Stable flat base -->
+            <geom name="bunny_flat_base" type="box" size="0.05 0.03 0.005" pos="0 0 -0.045"
+                rgba="1 1 1 0" mass="0.1"
+                contype="1" conaffinity="1"
+                friction="5 0.01 0.001"/>
+
+            <!-- Visual only -->
+            <geom type="mesh" mesh="bunny_mesh" rgba="0.7 0.7 0.7 1"
+                contype="0" conaffinity="0"/>
+
+            <!-- Main mesh collision (light) -->
+            <geom name="bunny_collision" type="mesh" mesh="bunny_mesh" rgba="1 1 1 0"
+                contype="1" conaffinity="1" group="1" mass="0.01"
+                friction="2 0.005 0.0005"/>
+        </body>
+    </worldbody>
+</mujoco>

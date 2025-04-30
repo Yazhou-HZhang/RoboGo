@@ -1,0 +1,13 @@
+<mujoco model="stanford_bunny">
+
+  <include file="/Users/hanhaotong/Desktop/CS225A/tidybot_project/RoboGo/tidybot2-main/models/stanford_tidybot/stanford_bunny/assets.xml"/>
+
+
+  <worldbody>
+    <body name="stanford_bunny" pos="0.6 0.0 1">
+      <include file="/Users/hanhaotong/Desktop/CS225A/tidybot_project/RoboGo/tidybot2-main/models/stanford_tidybot/stanford_bunny/body.xml"/>
+
+    </body>
+  </worldbody>
+
+</mujoco>
