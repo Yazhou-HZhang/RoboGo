@@ -1,0 +1,18 @@
+<mujoco model="rice_dispenser">
+
+    <asset>
+        <mesh name="dispenser_mesh" file="../assets/rice_dispenser/rice_dispenser.stl" scale="0.2 0.2 0.2"/>
+    </asset>
+
+    <worldbody>
+        <body name="dispenser" pos="1.0 -0.25 0.8" euler="1.5708 -1.5708 0">
+            <freejoint/>
+
+            <geom type="mesh" mesh="dispenser_mesh" rgba="0.7 0.7 0.7 1"/>
+
+            <geom name="dispenser_collision" type="mesh" mesh="dispenser_mesh" rgba="1 1 1 0" 
+                contype="1" conaffinity="1" group="1" mass="0.1"/>
+        </body>
+    </worldbody>
+
+</mujoco>
