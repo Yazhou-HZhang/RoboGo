@@ -312,6 +312,7 @@ class MujocoSim:
 
 class MujocoEnv:
     def __init__(self, render_images=True, show_viewer=True, show_images=False):
+        # self.mjcf_path = 'models/stanford_tidybot/scene_with_bunny.xml'
         self.mjcf_path = 'models/stanford_tidybot/scene.xml'
         self.render_images = render_images
         self.show_viewer = show_viewer
