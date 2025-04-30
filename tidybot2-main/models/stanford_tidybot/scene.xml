@@ -1,28 +1,57 @@
 <mujoco model="tidybot scene">
-  <include file="tidybot.xml"/>
 
+  <!-- Include the robot and the bunny -->
+  <include file="tidybot.xml"/>
+  <include file="bunny.xml"/>
+  <include file="kitchen_table.xml"/>
+  <include file="rice_cooker.xml"/>
+  <include file="rice_dispenser.xml"/>
+  <include file="sauce_pot.xml"/>
+
+
+  <!-- Statistics for visualization -->
   <statistic center="0.25 0 0.6" extent="1.0" meansize="0.05"/>
 
+  <!-- Visual settings -->
   <visual>
     <headlight diffuse="0.6 0.6 0.6" ambient="0.1 0.1 0.1" specular="0 0 0"/>
     <rgba haze="0.15 0.25 0.35 1"/>
     <global azimuth="120" elevation="-20"/>
   </visual>
 
+  <!-- Assets: groundplane texture -->
   <asset>
     <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072"/>
     <texture type="2d" name="groundplane" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3"
       markrgb="0.8 0.8 0.8" width="300" height="300"/>
-    <!-- <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5" reflectance="0.2"/> -->
     <material name="groundplane" texture="groundplane" texuniform="true" texrepeat="5 5"/>
   </asset>
 
+  <!-- Default settings -->
+  <default class="main">
+    <!-- Main default for general geoms -->
+    <geom friction="1 0.005 0.0001" density="1000" condim="3" contype="1" conaffinity="1"/>
+    
+    <!-- Nested object_col class for Stanford Bunny contact geoms -->
+    <default class="object_col">
+      <geom friction="1 0.005 0.0001" density="1000" condim="3" contype="1" conaffinity="1"/>
+    </default>
+  </default>
+
+  <!-- World elements -->
   <worldbody>
+    <!-- Light source -->
     <light pos="0 0 1.5" directional="true"/>
+
+    <!-- Ground plane -->
     <geom name="floor" size="0 0 0.05" type="plane" material="groundplane"/>
-    <body name="cube" pos="0.6 0 0.02">
+
+    <!-- Small cubes -->
+    <body name="cube1" pos="-0.6 0 0.02">
       <freejoint/>
       <geom type="box" size="0.02 0.02 0.02" rgba=".5 .7 .5 1" mass="0.1"/>
     </body>
+    <!-- Stanford Bunny is already included via object.xml -->
   </worldbody>
+
 </mujoco>

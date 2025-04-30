@@ -1,0 +1,11 @@
+<mujoco model="stanford_bunny_assets">
+    <asset>
+        <mesh name="stanford_bunny" file="/Users/hanhaotong/Desktop/CS225A/tidybot_project/RoboGo/tidybot2-main/models/assets/stanford_bunny/stanford_bunny.stl" scale="1 1 1"/>
+        <mesh name="contact0" file="/Users/hanhaotong/Desktop/CS225A/tidybot_project/RoboGo/tidybot2-main/models/assets/stanford_bunny/contact0.stl"/>
+        <mesh name="contact1" file="/Users/hanhaotong/Desktop/CS225A/tidybot_project/RoboGo/tidybot2-main/models/assets/stanford_bunny/contact1.stl"/>
+        <mesh name="contact2" file="/Users/hanhaotong/Desktop/CS225A/tidybot_project/RoboGo/tidybot2-main/models/assets/stanford_bunny/contact2.stl"/>
+        <mesh name="contact3" file="/Users/hanhaotong/Desktop/CS225A/tidybot_project/RoboGo/tidybot2-main/models/assets/stanford_bunny/contact3.stl"/>
+        <mesh name="contact4" file="/Users/hanhaotong/Desktop/CS225A/tidybot_project/RoboGo/tidybot2-main/models/assets/stanford_bunny/contact4.stl"/>
+        <mesh name="contact5" file="/Users/hanhaotong/Desktop/CS225A/tidybot_project/RoboGo/tidybot2-main/models/assets/stanford_bunny/contact5.stl"/>
+    </asset>
+</mujoco>
