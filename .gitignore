@@ -1,0 +1,11 @@
+# Ignore Python bytecode
+*.pyc
+
+# Ignore backup files
+*~
+
+# Ignore data folder
+tidybot2-main/data/
+
+# Optionally ignore diffusion_policy if it's generated or large
+tidybot2-main/diffusion_policy/
