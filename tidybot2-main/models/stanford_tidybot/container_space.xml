@@ -1,0 +1,9 @@
+<mujoco model="container_space">
+
+    <worldbody>
+        <body name="container_space" pos="1.05 -0.1 0.80">
+        <geom type="box" size="0.3 0.3 0.001" rgba=".5 .7 .5 1" mass="0.1"/>
+        </body>
+    </worldbody>
+
+</mujoco>

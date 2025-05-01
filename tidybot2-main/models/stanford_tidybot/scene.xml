@@ -6,7 +6,11 @@
   <include file="kitchen_table.xml"/>
   <include file="rice_cooker.xml"/>
   <include file="rice_dispenser.xml"/>
-  <include file="sauce_pot.xml"/>
+  <!-- <include file="sauce_pot.xml"/> -->
+  <include file="rice_container.xml"/>
+  <include file="water_container.xml"/>
+  <include file="water_dispenser.xml"/>
+  <include file="container_space.xml"/>
 
 
   <!-- Statistics for visualization -->
