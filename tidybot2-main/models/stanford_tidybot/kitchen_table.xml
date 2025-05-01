@@ -11,7 +11,7 @@
 
             <!-- Collision mesh with friction -->
             <geom name="table_collision" type="mesh" mesh="table_mesh" rgba="1 1 1 0"
-                  contype="1" conaffinity="1" group="1"
+                  contype="1" conaffinity="1" group="1" mass="1"
                   friction="3.0 0.1 0.01"  condim="3"/>
         </body>
     </worldbody>
