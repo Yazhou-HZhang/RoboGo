@@ -6,7 +6,7 @@
     </asset>
 
     <worldbody>
-        <body name="bunny" pos="1.1 -0.85 0.9" euler="0 0 0">
+        <body name="bunny" pos="1.1 -0.9 1.0" euler="0 0 0">
             <freejoint/>
 
             <!-- Stable flat base -->
@@ -20,9 +20,9 @@
                 contype="0" conaffinity="0"/>
 
             <!-- Main mesh collision (light) -->
-            <geom name="bunny_collision" type="mesh" mesh="bunny_mesh" rgba="1 1 1 0"
+            <geom name="bunny_collision" type="box" size="0.055 0.045 0.06" rgba="1 1 1 0"
                 contype="1" conaffinity="1" group="1" mass="0.01"
-                friction="2 0.005 0.0005"/>
+                friction="1000 1000 1000"/>
         </body>
     </worldbody>
 </mujoco>
