@@ -5,13 +5,13 @@
     </asset>
 
     <worldbody>
-        <body name="water_dispenser" pos="1.05 0.75 0.71" euler="1.5708 -1.5708 0">
-            <freejoint/>
+        <body name="water_dispenser" pos="1.05 0.75 0.41" euler="1.5708 -1.5708 0">
+            <!-- <freejoint/> -->
 
             <geom type="mesh" mesh="water_dispenser_mesh" rgba="0.7 0.7 0.7 1"/>
 
-            <geom name="water_dispenser_collision" type="mesh" mesh="water_dispenser_mesh" rgba="1 1 1 0" 
-                contype="1" conaffinity="1" group="1" mass="0.1"/>
+            <!-- <geom name="water_dispenser_collision" type="mesh" mesh="water_dispenser_mesh" rgba="1 1 1 0" 
+                contype="1" conaffinity="1" group="1" mass="0.1"/> -->
         </body>
     </worldbody>
 

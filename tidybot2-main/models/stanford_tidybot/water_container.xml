@@ -1,7 +1,7 @@
 <mujoco model="water_container">
 
     <asset>
-        <mesh name="water_mesh" file="../assets/water_container/water_container.stl" scale="0.8 0.8 0.8"/>
+        <mesh name="water_mesh" file="../assets/water_container/water_container.stl" scale="0.6 0.6 0.6"/>
     </asset>
 
     <worldbody>
@@ -10,7 +10,7 @@
 
             <geom type="mesh" mesh="water_mesh" rgba="0.7 0.7 0.7 1"/>
 
-            <geom name="water_collision" type="mesh" mesh="water_mesh" rgba="1 1 1 0" 
+            <geom name="water_collision" type="box" mesh="water_mesh" rgba="1 1 1 0" 
                 contype="1" conaffinity="1" group="1" mass="0.1"/>
         </body>
     </worldbody>

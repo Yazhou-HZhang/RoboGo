@@ -1,7 +1,7 @@
 <mujoco model="rice_container">
 
     <asset>
-        <mesh name="rice_mesh" file="../assets/rice_container/rice_container.stl" scale="0.8 0.8 0.8"/>
+        <mesh name="rice_mesh" file="../assets/rice_container/rice_container.stl" scale="0.6 0.6 0.6"/>
     </asset>
 
     <worldbody>
@@ -10,8 +10,8 @@
 
             <geom type="mesh" mesh="rice_mesh" rgba="0.7 0.7 0.7 1"/>
 
-            <!-- <geom name="rice_collision" type="mesh" mesh="rice_mesh" rgba="1 1 1 0" 
-                contype="1" conaffinity="1" group="1" mass="0.1"/> -->
+            <geom name="rice_collision" type="box" mesh="rice_mesh" rgba="1 1 1 0" 
+                contype="1" conaffinity="1" group="1" mass="0.1"/>
         </body>
     </worldbody>
 
