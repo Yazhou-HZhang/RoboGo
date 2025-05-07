@@ -1,3 +1,5 @@
 Wed Apr 30 02:18:04 2025
 ERROR: mju_cholUpdateSparse: varying sparsity pattern
+Mon May  5 15:49:31 2025
+WARNING: Nan, Inf or huge value in QACC at DOF 0. The simulation is unstable. Time = 4.2140.
 
