@@ -55,6 +55,10 @@
       <freejoint/>
       <geom type="box" size="0.02 0.02 0.02" rgba=".5 .7 .5 1" mass="0.1"/>
     </body>
+
+    <!--Guiding line on ground-->
+    <geom name="guiding_line" type="box" size="0.05 1 0.00001" pos="0 0 0.01" rgba="1 1 0 1 "/>
+
     <!-- Stanford Bunny is already included via object.xml -->
   </worldbody>
 
