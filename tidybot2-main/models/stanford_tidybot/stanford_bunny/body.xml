@@ -1,0 +1,9 @@
+<body>
+    <geom name="stanfordbunny_visual" mesh="stanford_bunny" rgba="0.0 0.0 0.8 1.0"/>
+    <geom name="stanfordbunny_contact0" mesh="contact0" class="object_col" rgba="0.0 0.0 0.8 1.0"/>
+    <geom name="stanfordbunny_contact1" mesh="contact1" class="object_col" rgba="0.0 0.0 0.8 1.0"/>
+    <geom name="stanfordbunny_contact2" mesh="contact2" class="object_col" rgba="0.0 0.0 0.8 1.0"/>
+    <geom name="stanfordbunny_contact3" mesh="contact3" class="object_col" rgba="0.0 0.0 0.8 1.0"/>
+    <geom name="stanfordbunny_contact4" mesh="contact4" class="object_col" rgba="0.0 0.0 0.8 1.0"/>
+    <geom name="stanfordbunny_contact5" mesh="contact5" class="object_col" rgba="0.0 0.0 0.8 1.0"/>
+</body>

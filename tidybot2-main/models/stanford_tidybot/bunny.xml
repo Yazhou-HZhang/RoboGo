@@ -2,11 +2,11 @@
 <compiler inertiafromgeom="true"/>
 
     <asset>
-        <mesh name="bunny_mesh" file="../assets/stanford_bunny/stanford_bunny.stl" scale="2 2 2"/>
+        <mesh name="bunny_mesh" file="../assets/stanford_bunny/stanford_bunny.stl" scale="1 1 1"/>
     </asset>
 
     <worldbody>
-        <body name="bunny" pos="1 -0.75 0.95" euler="0 0 1.5708">
+        <body name="bunny" pos="1.1 -0.85 0.9" euler="0 0 0">
             <freejoint/>
 
             <!-- Stable flat base -->
@@ -21,7 +21,8 @@
 
             <!-- Main mesh collision (light) -->
             <geom name="bunny_collision" type="mesh" mesh="bunny_mesh" rgba="1 1 1 0"
-                contype="1" conaffinity="1" group="1" mass="1"/>
+                contype="1" conaffinity="1" group="1" mass="0.01"
+                friction="2 0.005 0.0005"/>
         </body>
     </worldbody>
 </mujoco>
