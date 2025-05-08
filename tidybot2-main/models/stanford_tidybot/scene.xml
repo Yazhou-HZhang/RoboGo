@@ -1,5 +1,7 @@
 <mujoco model="tidybot scene">
 
+  <!-- <option gravity="0 0 0"/> -->
+
   <!-- Include the robot and the bunny -->
   <include file="tidybot.xml"/>
   <include file="bunny.xml"/>
