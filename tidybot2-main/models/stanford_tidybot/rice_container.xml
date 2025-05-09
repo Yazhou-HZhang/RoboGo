@@ -1,21 +1,35 @@
-<mujoco model="rice_container">
+ <mujoco model="rice_container">
 
     <asset>
         <mesh name="rice_mesh" file="../assets/rice_container/rice_container.stl" scale="0.6 0.6 0.6"/>
+        
+        <!-- Define PLA-style red material -->
+        <material name="red_pla" rgba="0.9 0.1 0.1 1" specular="0.3" shininess="0.5" reflectance="0.2"/> <!-- Adjust rgba to match the real PLA red they offer -->
+
+        <texture name="rice_aruco_tex" type="2d" file="../assets/aruco_markers/marker25.png"/>
+        <material name="rice_aruco_mat" texture="rice_aruco_tex" texuniform="true" texrepeat="50 50" rgba="1 1 1 1"/>
     </asset>
 
     <worldbody>
         <body name="rice" pos="1 -0.2 0.51" euler="-1.5708 -1.5708 0">
             <freejoint/>
 
-            <geom type="mesh" mesh="rice_mesh" rgba="0.7 0.7 0.7 1"/>
+            <geom type="mesh" mesh="rice_mesh" material="red_pla"/>  
 
             <geom name="rice_collision" type="box" mesh="rice_mesh" rgba="1 1 1 0" 
                 contype="1" conaffinity="1" group="1" mass="0.1"/>
 
-            <geom name="marker_rice" type="box" size="0.02 0.01 0.00001" pos="0 -0.024 0.031" rgba="1 0 0 1"/>
-
+            <!-- ArUco marker on the side -->
+            <geom name="rice_aruco_marker" type="box"
+                  size="0.02 0.02 0.00001"             
+                  pos="0 -0.025 0.031"                   
+                  euler="0 0 3.1416"                      
+                  material="rice_aruco_mat"
+                  contype="0" conaffinity="0" group="0"/>
+                <!-- Width x Height x Thickness -->
+                <!-- Position relative to container -->
+                <!-- Rotate to face outward -->
         </body>
     </worldbody>
 
-</mujoco>
+</mujoco> 
