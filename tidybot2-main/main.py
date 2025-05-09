@@ -79,6 +79,7 @@ def run_episode(env, policy, writer=None):
         # Wait for writer to finish saving to disk
         writer.wait_for_flush()
 
+# # Original main function
 def main(args):
     # Create env
     if args.sim:
@@ -103,6 +104,34 @@ def main(args):
             run_episode(env, policy, writer)
     finally:
         env.close()
+
+
+# # Modified main function
+# def main(args):
+#     # Create env
+#     if args.sim:
+#         from mujoco_env import MujocoEnv, ImageSavingEnv
+#         if args.teleop:
+#             base_env = MujocoEnv(show_images=True)
+#             env = ImageSavingEnv(base_env)
+#         else:
+#             env = MujocoEnv()
+#     else:
+#         from real_env import RealEnv
+#         env = RealEnv()
+
+#     # Create policy
+#     if args.teleop:
+#         policy = TeleopPolicy()
+#     else:
+#         policy = RemotePolicy()
+
+#     try:
+#         while True:
+#             writer = EpisodeWriter(args.output_dir) if args.save else None
+#             run_episode(env, policy, writer)
+#     finally:
+#         env.close()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
