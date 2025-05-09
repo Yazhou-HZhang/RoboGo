@@ -17,6 +17,7 @@ import numpy as np
 from ruckig import InputParameter, OutputParameter, Result, Ruckig
 from constants import POLICY_CONTROL_PERIOD
 from ik_solver import IKSolver
+import os
 
 class ShmState:
     def __init__(self, existing_instance=None):
@@ -414,10 +415,70 @@ class MujocoEnv:
                 shm_image.close()
                 shm_image.shm.unlink()
 
+'''
+This is a test function to save images from the mujoco simulation.
+it saves initial specific number of images from specific camera.
+Note: This is not a part of the main functionality of the code.
+Yicheng-dev
+'''
+def save_images(env, camera_name ='wrist', num_images_to_save=10):
+    saved_images = 0
+    while saved_images < num_images_to_save:
+        shm_image = next((img for img in env.shm_images if img.camera_name == camera_name), None)
+        if shm_image is not None:
+            img_rgb = shm_image.data.copy()
+            img_bgr = cv.cvtColor(img_rgb, cv.COLOR_RGB2BGR)
+            filepath = f'test_images/random_action_{camera_name}_{saved_images:03d}.png'
+            cv.imwrite(filepath, img_bgr)
+            # print(f"[INFO] Saved image to {filepath}")
+            saved_images += 1
+    print(f"[INFO] Saved {saved_images} images from camera '{camera_name}'.")
+
+
+'''
+This is a test class wrapper to save images from the mujoco simulation.
+Note: This is not a part of the main functionality of the code.
+Yicheng-dev
+'''
+class ImageSavingEnv:
+    def __init__(self, env, camera_name='wrist', folder='test_images'):
+        self.env = env
+        self.camera_name = camera_name
+        self.folder = folder
+        os.makedirs(folder, exist_ok=True)
+        self.counter = 0
+
+    def step(self, action):
+        self.env.step(action)
+        self.save_image()
+
+    def reset(self):
+        return self.env.reset()
+
+    def get_obs(self):
+        return self.env.get_obs()
+
+    def close(self):
+        self.env.close()
+
+    def save_image(self):
+        # Access shm_images directly
+        shm_image = next((img for img in self.env.shm_images if img.camera_name == self.camera_name), None)
+        if shm_image is not None:
+            img_rgb = shm_image.data.copy()
+            img_bgr = cv.cvtColor(img_rgb, cv.COLOR_RGB2BGR)
+            cv.imwrite(f'{self.folder}/{self.camera_name}_{self.counter:04d}.png', img_bgr)
+            self.counter += 1
+
+    def __getattr__(self, name):
+        return getattr(self.env, name)
+    
+
 if __name__ == '__main__':
-    env = MujocoEnv()
+    # env = MujocoEnv()
     # env = MujocoEnv(show_images=True)
     # env = MujocoEnv(render_images=False)
+    env = MujocoEnv(render_images=True, show_images=True)
     try:
         while True:
             env.reset()
@@ -430,7 +491,19 @@ if __name__ == '__main__':
                 }
                 env.step(action)
                 obs = env.get_obs()
-                print([(k, v.shape) if v.ndim == 3 else (k, v) for (k, v) in obs.items()])
+                # print([(k, v.shape) if v.ndim == 3 else (k, v) for (k, v) in obs.items()])
+                
+                save_images(env, camera_name = 'wrist' , num_images_to_save=10) # TEST: save images from wrist camera
+                    
                 time.sleep(POLICY_CONTROL_PERIOD)  # Note: Not precise
+
+                # # show images (shm_image are images)
+                # if env.show_images:
+                #     for i, shm_image in enumerate(env.shm_images):
+                #         cv.imshow(shm_image.camera_name, cv.cvtColor(shm_image.data, cv.COLOR_RGB2BGR))
+                #         cv.moveWindow(shm_image.camera_name, 640 * i, -100)
+                #     cv.waitKey(1)
+
+                # print(env.render_images)
     finally:
         env.close()

@@ -9,3 +9,6 @@ tidybot2-main/data/
 
 # Optionally ignore diffusion_policy if it's generated or large
 tidybot2-main/diffusion_policy/
+
+# Ignore Test Image folder
+tidybot2-main/test_images/
