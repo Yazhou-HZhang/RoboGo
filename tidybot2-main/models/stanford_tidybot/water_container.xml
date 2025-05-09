@@ -5,7 +5,7 @@
     </asset>
 
     <worldbody>
-        <body name="water" pos="1.0 0.0 0.8" euler="-1.5708 -1.5708 0">
+        <body name="water" pos="1.0 0.0 0.51" euler="-1.5708 -2.0 0.0">
             <freejoint/>
 
             <geom type="mesh" mesh="water_mesh" rgba="0.7 0.7 0.7 1"/>

@@ -6,7 +6,7 @@
     </asset>
 
     <worldbody>
-        <body name="bunny" pos="1.1 -0.9 1.0" euler="0 0 0">
+        <body name="bunny" pos="1.1 -0.9 0.6" euler="0 0 0">
             <freejoint/>
 
             <!-- Stable flat base -->

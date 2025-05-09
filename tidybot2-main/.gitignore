@@ -4,4 +4,4 @@ __pycache__
 *.un~
 *.swp
 
-scripts/
+# scripts/

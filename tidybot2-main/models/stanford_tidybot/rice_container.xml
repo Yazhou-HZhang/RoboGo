@@ -5,7 +5,7 @@
     </asset>
 
     <worldbody>
-        <body name="rice" pos="1 -0.3 0.80" euler="-1.5708 -1.5708 0">
+        <body name="rice" pos="1 -0.2 0.51" euler="-1.5708 -1.5708 0">
             <freejoint/>
 
             <geom type="mesh" mesh="rice_mesh" rgba="0.7 0.7 0.7 1"/>
