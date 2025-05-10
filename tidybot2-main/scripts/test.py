@@ -114,13 +114,6 @@ def main():
     base_pose_1 = np.array([(water_container_pos[0] - base_to_table_distance), tag_pos[0], 0.0])
     gripper_pos_world_1, gripper_quat_world_1 = compute_grasp_pose(water_container_pos, water_container_quat, end_effector_offset_1)
 
-    InspectionPose = { 
-        'arm_pos': np.array([0.3, 0, 0.7]),
-        'arm_quat': np.array([0.6123724, 0.6123724, 0.3535534, 0.3535534]),
-        'gripper_pos': np.array([0.2]),
-        'base_pose': np.array([0.0, 0.0, 0.0]), # modify this to the desired base position
-    }
-    
     target_pose_1 = {
         'base_pose': base_pose_1,
         'arm_pos': gripper_pos_world_1 - base_pose_1,
@@ -152,7 +145,6 @@ def main():
         'arm_quat': np.array([0, 0.7071, 0.0, 0.7071])
     }
 
-    move_to_target(env, InspectionPose, name="Overview")
     move_to_target(env, target_pose_1, name="Target 1")
     # move_to_target(env, target_pose_2, name="Target 2")
     # move_to_target(env, target_pose_3,tol_pos=1, name="Target 3")
