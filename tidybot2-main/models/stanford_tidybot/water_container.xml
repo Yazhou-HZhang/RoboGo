@@ -6,8 +6,8 @@
         <!-- Define PLA-style blue material -->
         <material name="blue_pla" rgba="0.1 0.3 0.9 1" specular="0.3" shininess="0.5" reflectance="0.2"/>
 
-        <texture name="water_aruco_tex" type="2d" file="../assets/aruco_markers/marker27.png"/>
-        <material name="water_aruco_mat" texture="water_aruco_tex" texuniform="true" texrepeat="50 50" rgba="1 1 1 1"/>
+        <texture name="water_apriltag_tex" type="2d" file="../assets/AprilTags/tag36h11/tag36h11-0.png"/>
+        <material name="water_apriltag_mat" texture="water_apriltag_tex" texuniform="true" texrepeat="50 50" rgba="1 1 1 1"/>
     </asset>
 
     <worldbody>
@@ -19,12 +19,12 @@
             <geom name="water_collision" type="box" mesh="water_mesh" rgba="1 1 1 0" 
                   contype="1" conaffinity="1" group="1" mass="0.1"/>
 
-            <!-- ArUco marker on the side -->
-            <geom name="aruco_marker_water" type="box"
-                  size="0.02 0.02 0.00001"             
+            <!-- apriltag marker on the side -->
+            <geom name="apriltag_marker_water" type="box"
+                  size="0.025 0.025 0.00001"             
                   pos="0 -0.025 0.031"                   
                   euler="0 0 3.1416"                      
-                  material="water_aruco_mat"
+                  material="water_apriltag_mat"
                   contype="0" conaffinity="0" group="0"/>
                 <!-- Width x Height x Thickness -->
                 <!-- Position relative to container -->
