@@ -5,7 +5,7 @@ import os
 from scipy.spatial.transform import Rotation as R
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from mujoco_env import MujocoEnv
+from mujoco_env_with_depth import MujocoEnv
 from constants import POLICY_CONTROL_PERIOD
 
 def euler_to_wxyz(euler_angles):
@@ -105,7 +105,7 @@ rice_container_quat = np.array([0.5, 0.5, 0.5, 0.5])
 
 
 def main():
-    env = MujocoEnv(show_viewer=True)
+    env = MujocoEnv(show_viewer=True, show_images=True)
     env.reset()
     time.sleep(2)
     obs = env.get_obs()         # dict_keys(['base_pose', 'arm_pos', 'arm_quat', 'gripper_pos', 'base_image', 'wrist_image'])
@@ -114,13 +114,21 @@ def main():
     base_pose_1 = np.array([(water_container_pos[0] - base_to_table_distance), tag_pos[0], 0.0])
     gripper_pos_world_1, gripper_quat_world_1 = compute_grasp_pose(water_container_pos, water_container_quat, end_effector_offset_1)
 
-    InspectionPose = { 
+    InspectionPose1 = { 
         'arm_pos': np.array([0.3, 0, 0.7]),
         'arm_quat': np.array([0.6123724, 0.6123724, 0.3535534, 0.3535534]),
         'gripper_pos': np.array([0.2]),
         'base_pose': np.array([0.0, 0.0, 0.0]), # modify this to the desired base position
     }
     
+    
+    InspectionPose2 = { 
+        'gripper_pos': np.array([0.2]),
+        'base_pose': np.array([0.0, -0.2, 0.0]), # modify this to the desired base position
+        'arm_pos': [0.6, 0, 0.31],
+        'arm_quat': np.array([0.5792, 0.5792, 0.4056, 0.4056])
+    }
+
     target_pose_1 = {
         'base_pose': base_pose_1,
         'arm_pos': gripper_pos_world_1 - base_pose_1,
@@ -152,8 +160,9 @@ def main():
         'arm_quat': np.array([0, 0.7071, 0.0, 0.7071])
     }
 
-    move_to_target(env, InspectionPose, name="Overview")
-    move_to_target(env, target_pose_1, name="Target 1")
+    move_to_target(env, InspectionPose1, name="Overview")
+    move_to_target(env, InspectionPose2, name="Close look")
+    # move_to_target(env, target_pose_1, name="Target 1")
     # move_to_target(env, target_pose_2, name="Target 2")
     # move_to_target(env, target_pose_3,tol_pos=1, name="Target 3")
     # move_to_target(env, target_pose_4, name="Target 4")
@@ -162,9 +171,9 @@ def main():
     
     print("All targets reached!")
     
-    print(water_container_pos)
-    print(water_container_quat)
-    print(obs["arm_pos"])
+    # print(water_container_pos)
+    # print(water_container_quat)
+    # print(obs["arm_pos"])
     
     # Keep simulation running
     try:
