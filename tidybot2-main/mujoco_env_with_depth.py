@@ -18,8 +18,10 @@ from ruckig import InputParameter, OutputParameter, Result, Ruckig
 from constants import POLICY_CONTROL_PERIOD
 from ik_solver import IKSolver
 import os
+from scripts.utils.ArUco import get_tag_pose_world 
+
 MARKER_IMAGE_LENGTH         = 0.02  # m (edge length)
-MARKER_IMAGE_BORDER_PERCENT = 0.05  # 5% of image size
+MARKER_IMAGE_BORDER_PERCENT = 0.1  # 5% of image size
 MARKER_LENGTH               = MARKER_IMAGE_LENGTH *(1-MARKER_IMAGE_BORDER_PERCENT)
 
 
@@ -424,121 +426,60 @@ class MujocoEnv:
                 print(f'Warning: Offscreen rendering took {1000 * render_time:.1f} ms, try making the Mujoco viewer window smaller to speed up offscreen rendering')
 
     def visualizer_loop(self):
-        # ───────── 1.  Re‑attach to shared‑memory images  ─────────────────────────
-        shm_images = [ShmImage(existing_instance=img) for img in self.shm_images]
+        shm_images = [ShmImage(existing_instance=shm_image) for shm_image in self.shm_images]
+        cam_rgb = next(img for img in shm_images if img.camera_name == "wrist")
 
-        # Wait until each camera has produced its first frame.
-        for img in shm_images:
-            while np.all(img.data == 0):
-                time.sleep(0.01)
-
-        # ───────── 2.  Fetch the specific cameras we care about  ─────────────────
-        cam_rgb   = next(img for img in shm_images if img.camera_name == "wrist")
-        cam_depth = next(img for img in shm_images if img.camera_name == "wrist_depth")
-        cam_base  = next(img for img in shm_images if img.camera_name == "base")
-
-        # ───────── 3.  Decide scale so all windows are proportional  ────────────
-        SCALE = 1      # 1.0 = native, 0.5 = half‑size, etc.
-
-        def scaled_size(img):
-            h, w = img.data.shape[:2]
-            return int(w * SCALE), int(h * SCALE)
-
-        w_rgb,   h_rgb   = scaled_size(cam_rgb)
-        w_depth, h_depth = scaled_size(cam_depth)
-        w_base,  h_base  = scaled_size(cam_base)
-
-        # ───────── 4.  Screen positions  ─────────────────────────────────────────
-        GAP_X, GAP_Y = 8, 40           # spacing between windows
-        TOP_X, TOP_Y = 60, 60          # top‑left corner of grid
-
-        pos_rgb   = (TOP_X, TOP_Y)
-        pos_depth = (TOP_X + w_rgb + GAP_X, TOP_Y)
-        pos_base  = (TOP_X, TOP_Y + h_rgb + GAP_Y)
-
-        # Create windows once
-        def create(img, size, pos):
-            cv.namedWindow(img.camera_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
-            cv.resizeWindow(img.camera_name, *size)
-            cv.moveWindow(img.camera_name, *pos)
-
-        #convert to grayscale
-        wrist_gray = cv.cvtColor(cam_rgb.data, cv.COLOR_RGB2GRAY)
-
-        corners, ids, _ = cv.aruco.detectMarkers(wrist_gray, cv.aruco.getPredefinedDictionary(cv.aruco.DICT_6X6_250))
-        print(corners, ids)
-
-        # draw the detected markers on the image
-        cv.aruco.drawDetectedMarkers(wrist_gray, corners, ids)
-
-        # Use known image size
-        height, width = wrist_gray.shape[:2]
-
-        # Assume 60° vertical FoV (adjust as needed)
-        fovy_deg = 60
-        fovy_rad = np.deg2rad(fovy_deg)
-
-        # Compute focal length from vertical FoV
+        # Camera intrinsics setup
+        height, width = cam_rgb.data.shape[:2]
+        fovy_rad = np.deg2rad(60)
         fy = height / (2 * np.tan(fovy_rad / 2))
-        fx = fy  # Assume square pixels
-        cx = width / 2
-        cy = height / 2
+        fx = fy
+        cx, cy = width / 2, height / 2
 
-        # Camera intrinsics matrix
-        cam_mtx = np.array([
-            [fx, 0, cx],
-            [0, fy, cy],
-            [0,  0,  1]
-        ])
-        print("Camera Matrix:\n", cam_mtx)
-
-        # No distortion in simulation
+        cam_mtx = np.array([[fx, 0, cx], [0, fy, cy], [0, 0, 1]])
         dist_coef = np.zeros(5)
-        print("Distortion Coefficients:\n", dist_coef)
 
-        # create(cam_rgb,   (w_rgb,  h_rgb),   pos_rgb)
-        # create(cam_depth, (w_depth, h_depth), pos_depth)
-        # create(cam_base,  (w_base, h_base),  pos_base)
-
-
-        # ───────── 5.  Refresh loop  ─────────────────────────────────────────────
         while True:
-            start_time = time.time()
-            # Wrist RGB
-            bgr = cv.cvtColor(cam_rgb.data, cv.COLOR_RGB2BGR)
-            # cv.imshow(cam_rgb.camera_name, bgr)
+            wrist_rgb = cam_rgb.data.copy()
+            wrist_gray = cv.cvtColor(wrist_rgb, cv.COLOR_RGB2GRAY)
 
-            depth_vis = cv.normalize(cam_depth.data, None, 0, 255,
-                                    cv.NORM_MINMAX).astype(np.uint8)
-            # cv.imshow(cam_depth.camera_name, depth_vis)
+            # Detect ArUco marker
+            corners, ids, _ = cv.aruco.detectMarkers(
+                wrist_gray, cv.aruco.getPredefinedDictionary(cv.aruco.DICT_6X6_250)
+            )
 
-            base_bgr = cv.cvtColor(cam_base.data, cv.COLOR_RGB2BGR)
-            # cv.imshow(cam_base.camera_name, base_bgr)
+            if ids is not None and len(corners) > 0:
+                rvecs, tvecs, _ = cv.aruco.estimatePoseSingleMarkers(
+                    corners, MARKER_LENGTH, cam_mtx, dist_coef
+                )
 
-            wrist_gray = cv.cvtColor(cam_rgb.data, cv.COLOR_RGB2GRAY)
-            corners, ids, _ = cv.aruco.detectMarkers(wrist_gray, cv.aruco.getPredefinedDictionary(cv.aruco.DICT_6X6_250))
-            # print(corners, ids)
-            rvec, tvec, _ = cv.aruco.estimatePoseSingleMarkers(corners, MARKER_LENGTH, cam_mtx, dist_coef)
-            # print(rvec, tvec)
-            # print id 's pose
-            if ids is not None:
-                cv.aruco.drawDetectedMarkers(wrist_gray, corners, ids)
-                for i in range(len(ids)):
-                    # Print marker pose in camera frame
-                    print("Time {:.1f} ms | Marker {}: rvec = {}, tvec = {}".format((time.time() - start_time)*100, ids[i], rvec[i], tvec[i]))            # draw the detected markers on the image
-            cv.aruco.drawDetectedMarkers(wrist_gray, corners, ids)
-            # draw the axis of the detected markers
-            cv.imshow("Detected Markers", wrist_gray)
-            # move the window to the top right corner
-            cv.moveWindow("Detected Markers", pos_rgb[0] + w_rgb + GAP_X, pos_rgb[1])
-           
-            # Wait for key press
+                for i, marker_id in enumerate(ids.flatten()):
+                    rot_mat, _ = cv.Rodrigues(rvecs[i])
+                    pos = tvecs[i].flatten()
+
+                    T_camera_tag = np.eye(4)
+                    T_camera_tag[:3, :3] = rot_mat
+                    T_camera_tag[:3, 3] = pos
+
+                    base_pose = self.shm_state.base_pose.copy()
+                    arm_pos = self.shm_state.arm_pos.copy()
+                    arm_quat = self.shm_state.arm_quat.copy()
+
+                    tag_pos_world, tag_quat_world = get_tag_pose_world(base_pose, arm_pos, arm_quat, T_camera_tag)
+
+                    print(f"Marker ID: {marker_id}, Position: {tag_pos_world}, Quaternion: {tag_quat_world}")
+
+            # Visualize markers
+            cv.aruco.drawDetectedMarkers(wrist_rgb, corners, ids)
+            cv.imshow(cam_rgb.camera_name, cv.cvtColor(wrist_rgb, cv.COLOR_RGB2BGR))
+
             if cv.waitKey(30) == 27:
                 break
 
         cv.destroyAllWindows()
         for img in shm_images:
             img.close()
+
 
 
     def reset(self):

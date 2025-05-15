@@ -10,7 +10,7 @@ marker_size = 500
 marker_image = aruco.generateImageMarker(dictionary, marker_id, marker_size)
 
 # Add white border (quiet zone) — by default 25% of marker size is a safe rule
-border_percentage = 0.05
+border_percentage = 0.1
 border_size = int(border_percentage * marker_size)
 marker_with_border = cv2.copyMakeBorder(
     marker_image,
